@@ -11,18 +11,6 @@
 #define XRES 32      // Tổng số cột trên hiển thị, phải nhỏ hơn hoặc bằng SAMPLES/2
 #define YRES 8       // Tổng số hàng trên hiển thị
 
-int MY_ARRAY[] = {0, 128, 64, 32, 16, 8, 4, 2, 1};; // mẫu mặc định = mẫu tiêu chuẩn
-int MY_MODE_1[] = {0, 128, 192, 224, 240, 248, 252, 254, 255}; // Mẫu tiêu chuẩn
-int MY_MODE_2[] = {0, 128, 64, 32, 16, 8, 4, 2, 1}; // Chỉ mẫu đỉnh
-int MY_MODE_3[] = {0, 128, 192, 160, 144, 136, 132, 130, 129}; // Chỉ mẫu đỉnh + điểm dưới cùng
-int MY_MODE_4[] = {0, 128, 192, 160, 208, 232, 244, 250, 253}; // Một khoảng trống ở phía trên, từ đèn thứ 3 trở đi
-int MY_MODE_5[] = {0, 1, 3, 7, 15, 31, 63, 127, 255}; // Mẫu tiêu chuẩn, đối xứng theo chiều dọc
-int MY_MODE_6[] = {0, 1, 2, 4, 8, 16, 32, 64, 128}; // Chỉ mẫu đỉnh ngược
-
-int MY_MODE_7[] = {0, 32, 64, 96, 128, 160, 192, 224, 255}; // Một chế độ sáng dần
-
-
-
 double vReal[SAMPLES];
 double vImag[SAMPLES];
 char data_avgs[XRES];
@@ -40,9 +28,23 @@ int value=0;
 MD_MAX72XX mx = MD_MAX72XX(LOAI_THIET_BI, CS_PIN, TONG_SO_THIET_BI);   // Đối tượng hiển thị
 arduinoFFT FFT = arduinoFFT();                                    // Đối tượng FFT
 
+
+int MY_ARRAY[] = {0, 128, 64, 32, 16, 8, 4, 2, 1};; // mẫu mặc định = mẫu tiêu chuẩn
+int MY_MODE_1[] = {0, 128, 192, 224, 240, 248, 252, 254, 255}; // Mẫu tiêu chuẩn
+int MY_MODE_2[] = {0, 128, 64, 32, 16, 8, 4, 2, 1}; // Chỉ mẫu đỉnh
+int MY_MODE_3[] = {0, 128, 192, 160, 144, 136, 132, 130, 129}; // Chỉ mẫu đỉnh + điểm dưới cùng
+int MY_MODE_4[] = {0, 128, 192, 160, 208, 232, 244, 250, 253}; // Một khoảng trống ở phía trên, từ đèn thứ 3 trở đi
+int MY_MODE_5[] = {0, 1, 3, 7, 15, 31, 63, 127, 255}; // Mẫu tiêu chuẩn, đối xứng theo chiều dọc
+int MY_MODE_6[] = {0, 1, 2, 4, 8, 16, 32, 64, 128}; // Chỉ mẫu đỉnh ngược
+int MY_MODE_7[] = {0, 32, 64, 96, 128, 160, 192, 224, 255}; // Một chế độ sáng dần
+
+
+
 void setup() {
     ADCSRA = B11100101;      // Đặt ADC sang chế độ chạy tự do và đặt tiền chia tới 32 (0xe5)
-    ADMUX = B00000000;       // Sử dụng chân A0 và tham chiếu điện áp ngoại
+    ADMUX = B01000000; // Sử dụng chân A0 và tham chiếu điện áp nội (VCC)
+   
+    //   đọc từ chân A0 có thể không hoạt động đúng cách hoặc gây cố định chương trình.
     pinMode(buttonPin, INPUT);
     mx.begin();  
      Serial.begin(9600);         // Khởi tạo hiển thị
